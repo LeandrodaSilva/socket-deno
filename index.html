@@ -91,8 +91,8 @@
 
   <div class="input-container">
     <input type="text">
-    <button id="send-btn" type="button" disabled>Send</button>
-    <button id="speak-btn" type="button">speak</button>
+    <button id="send-btn" type="button" disabled>Enviar</button>
+    <button id="speak-btn" type="button">Falar</button>
   </div>
 </div>
 <script type="module">
@@ -126,14 +126,14 @@
   let sendButton = document.getElementById('send-btn');
   let speakButton = document.getElementById('speak-btn');
   let inputEl = document.querySelector('input');
-  const scrollingElement = document.getElementById("list");
+  const scrollingElement = document.getElementById("messages");
 
   const config = { childList: true };
 
   const callback = function (mutationsList, observer) {
     for (let mutation of mutationsList) {
       if (mutation.type === "childList") {
-        window.scrollTo(0, document.body.scrollHeight);
+        scrollingElement.scrollTo(0, scrollingElement.scrollHeight);
       }
     }
   };
@@ -144,11 +144,11 @@
   speakButton.addEventListener('click', evt => {
     if (stream) {
      stream.getTracks().forEach(track => track.stop());
-     speakButton.innerText = 'speak';
+     speakButton.innerText = 'Falar';
      stream = null;
     } else {
       record();
-      speakButton.innerText = 'stop';
+      speakButton.innerText = 'Encerrar';
     }
   });
 
@@ -204,6 +204,8 @@
     let input = document.querySelector('input');
     let message = input.value;
     input.value = '';
+    sendButton.disabled = true;
+    inputEl.focus();
 
     webSocket.send(message);
   });
