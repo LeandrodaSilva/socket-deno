@@ -29,11 +29,11 @@
       max-width: 600px;
       padding: 5px;
       display: flex;
-      flex-direction: column;
       justify-content: start;
       align-items: start;
       overflow: hidden;
       overflow-y: auto;
+      flex-direction: column-reverse;
     }
 
     ul li {
@@ -167,12 +167,16 @@
           addMessage(message.data);
         } else if (message.type === 'audio' && message.verb === 'stop') {
           let audio = document.createElement('audio');
+          let listItem = document.createElement('li');
 
           let blob = new Blob(data, {type: 'audio/webm'});
           data = [];
           audio.src = URL.createObjectURL(blob);
           audio.controls = true;
-          messagesEl.appendChild(audio);
+
+          listItem.appendChild(audio);
+
+          messagesEl.appendChild(listItem);
         }
       } catch (e) {
         addMessage(event.data);
