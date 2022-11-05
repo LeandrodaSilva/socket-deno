@@ -131,6 +131,7 @@
     if (stream) {
      stream.getTracks().forEach(track => track.stop());
      speakButton.innerText = 'speak';
+     stream = null;
     } else {
       record();
       speakButton.innerText = 'stop';
@@ -159,7 +160,6 @@
   }
 
   webSocket.onmessage = (event) => {
-    console.log(event);
     if (typeof event.data === 'string') {
       try {
         let message = JSON.parse(event.data);
