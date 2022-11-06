@@ -6,7 +6,6 @@ const clients: WebSocketClient[] = [];
 wss.on("connection", function (ws: WebSocketClient) {
   clients.push(ws);
   ws.on("message", function (message: string | Uint8Array) {
-    console.log("message", message);
     if (typeof message === "string") {
       clients.forEach((client) => {
         client.send(message);
