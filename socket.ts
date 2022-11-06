@@ -7,8 +7,16 @@ wss.on("connection", function (ws: WebSocketClient) {
   clients.push(ws);
   ws.on("message", function (message: string | Uint8Array) {
     console.log("message", message);
-    clients.forEach((client) => {
-      client.send(message);
-    });
+    if (typeof message === "string") {
+      clients.forEach((client) => {
+        client.send(message);
+      });
+    } else {
+      const blob = new Blob([message]);
+      console.log("blob", blob);
+      clients.forEach((client) => {
+        client.send(message);
+      });
+    }
   });
 });
