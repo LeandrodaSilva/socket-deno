@@ -1,10 +1,9 @@
 // import { WebSocketClient, WebSocketServer } from "https://deno.land/x/websocket@v0.1.4/mod.ts";
-//@ts-ignore
-import "npm:mssql";
+// import "npm:mssql";
 import { createRequire } from "https://deno.land/std@0.165.0/node/module.ts";
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 
-const require = createRequire("node_modules");
+const require = createRequire(import.meta.url);
 const sql = require("mssql");
 // const wss = new WebSocketServer(8080);
 // const clients: WebSocketClient[] = [];
