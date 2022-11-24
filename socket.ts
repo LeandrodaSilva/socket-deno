@@ -93,6 +93,13 @@ const clients: WebSocketClient[] = [];
 wss.on("connection", function (ws: WebSocketClient) {
   clients.push(ws);
   ws.on("message", function (message: string | Uint8Array) {
+    fetch("https://chat.leandrodasilva.dev/api/message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      body: message,
+    })
     clients.forEach((client) => {
       client.send(message);
     });
