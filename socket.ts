@@ -4,7 +4,7 @@ import "npm:mssql";
 import { createRequire } from "https://deno.land/std@0.165.0/node/module.ts";
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 
-const require = createRequire(import.meta.url);
+const require = createRequire("node_modules");
 const sql = require("mssql");
 // const wss = new WebSocketServer(8080);
 // const clients: WebSocketClient[] = [];
