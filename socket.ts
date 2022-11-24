@@ -1,10 +1,10 @@
 // import { WebSocketClient, WebSocketServer } from "https://deno.land/x/websocket@v0.1.4/mod.ts";
 // import "npm:mssql";
 import { createRequire } from "https://deno.land/std@0.165.0/node/module.ts";
-import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
+import { serveTls, serve } from "https://deno.land/std@0.140.0/http/server.ts";
 
 const require = createRequire(import.meta.url);
-const sql = require("./node_modules/mssql/index.js");
+const sql = require("./node-mssql/index.js");
 // const wss = new WebSocketServer(8080);
 // const clients: WebSocketClient[] = [];
 
@@ -19,7 +19,7 @@ const sqlConfig = {
   }
 }
 
-serve(async (_req) => {
+await serve(async (_req) => {
   try {
     console.log(sql)
     // make sure that any items are correctly URL encoded in the connection string
@@ -38,6 +38,9 @@ serve(async (_req) => {
   return new Response("error", {
     headers: { "content-type": "text/plain" },
   });
+}, {
+  // certFile: "./server.crt",
+  // keyFile: "./server.key",
 });
 
 // wss.on("connection", function (ws: WebSocketClient) {
