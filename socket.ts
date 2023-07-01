@@ -21,21 +21,21 @@ wss.on("connection", function (ws: WebSocketClient) {
     const parsed: Message = JSON.parse(message);
 
     if (parsed.type === 'text' && parsed.data === '/clear-database') {
-      for await (const entry of kv.list({ prefix: ["messages"] })) {
+      const entries = kv.list({ prefix: ["messages"] });
+      for await (const entry of entries) {
         await kv.delete(entry.key);
-        clients.forEach((client) => {
-          client.send(JSON.stringify({
-            metadata: {
-              user: {
-                name: 'System'
-              }
-            },
-            data: `Deleted ${entry.key}`,
-            type: 'text'
-          }));
-        });
       }
-
+      clients.forEach((client) => {
+        client.send(JSON.stringify({
+          metadata: {
+            user: {
+              name: 'System'
+            }
+          },
+          data: `Deleted ${entries.length} messages by ${parsed.metadata.user.name}`,
+          type: 'text'
+        }));
+      });
       return;
     }
 
