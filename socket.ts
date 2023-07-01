@@ -24,7 +24,7 @@ wss.on("connection", function (ws: WebSocketClient) {
       for await (const entry of kv.list({ prefix: ["users"] })) {
         await kv.delete(entry.key);
         clients.forEach((client) => {
-          client.send({
+          client.send(JSON.stringify({
             metadata: {
               user: {
                 name: 'System'
@@ -32,7 +32,7 @@ wss.on("connection", function (ws: WebSocketClient) {
             },
             data: `Deleted ${entry.key}`,
             type: 'text'
-          });
+          }));
         });
       }
 
