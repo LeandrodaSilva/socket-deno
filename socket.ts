@@ -21,7 +21,7 @@ wss.on("connection", function (ws: WebSocketClient) {
     const parsed: Message = JSON.parse(message);
 
     if (parsed.type === 'text' && parsed.data === '/clear-database') {
-      await kv.clear();
+      await kv.delete(["messages"]);
       return;
     }
 
