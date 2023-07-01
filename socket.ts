@@ -21,8 +21,9 @@ wss.on("connection", function (ws: WebSocketClient) {
     const parsed: Message = JSON.parse(message);
 
     if (parsed.type === 'text' && parsed.data === '/clear-database') {
-      const entries = await kv.list({ prefix: ["messages"] });
-      for (const entry of entries) {
+      const entries = [];
+      for await (const entry of kv.list({ prefix: ["messages"] })) {
+        entries.push(entry);
         await kv.delete(entry.key);
       }
       clients.forEach((client) => {
