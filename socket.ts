@@ -47,7 +47,7 @@ wss.on("connection", function (ws: WebSocketClient) {
 });
 
 async function createMessage(message: Message) {
-  const uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  const uuid = crypto.randomUUID();
   const date = new Date().toISOString().split('T')[0];
   await kv.set(
     [
