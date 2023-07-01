@@ -19,7 +19,8 @@ wss.on("connection", function (ws: WebSocketClient) {
   clients.push(ws);
 
   for await (const entry of kv.list({ prefix: ["messages"] })) {
-    ws.send(JSON.stringify(entry.value));
+    const message = await kv.get(entry.key);
+    ws.send(JSON.stringify(message));
   }
 
   ws.on("message", async function (message: string) {
