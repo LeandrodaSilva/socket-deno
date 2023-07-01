@@ -35,13 +35,14 @@ wss.on("connection", function (ws: WebSocketClient) {
         data: `Deleted ${entries.length} messages by ${parsed.metadata.user.name}`,
         type: 'text'
       };
+      broadcastMessage({
+        ...parsed,
+        data: '/clear'
+      })
     }
 
     await createMessage(parsed);
-
-    clients.forEach((client) => {
-      client.send(JSON.stringify(parsed));
-    });
+    broadcastMessage(parsed);
   });
 });
 
@@ -57,4 +58,10 @@ async function createMessage(message: Message) {
     ],
     message
   );
+}
+
+function broadcastMessage(message: Message) {
+  clients.forEach((client) => {
+    client.send(JSON.stringify(message));
+  });
 }
