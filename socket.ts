@@ -9,7 +9,8 @@ wss.on("connection", function (ws: WebSocketClient) {
   clients.push(ws);
   ws.on("message", async function (message: string) {
     const parsed: { data: string; author: string } = JSON.parse(message);
-    await kv.set(["messages"], parsed);
+    const uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    await kv.set(["messages", uuid], parsed);
     clients.forEach((client) => {
       client.send(message);
     });
