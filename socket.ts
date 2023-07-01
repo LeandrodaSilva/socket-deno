@@ -18,7 +18,7 @@ type Message = {
 wss.on("connection", function (ws: WebSocketClient) {
   clients.push(ws);
   ws.on("message", async function (message: string) {
-    const parsed: Message = JSON.parse(message);
+    let parsed: Message = JSON.parse(message);
 
     if (parsed.type === 'text' && parsed.data === '/clear-database') {
       const entries = [];
@@ -26,33 +26,35 @@ wss.on("connection", function (ws: WebSocketClient) {
         entries.push(entry);
         await kv.delete(entry.key);
       }
-      clients.forEach((client) => {
-        client.send(JSON.stringify({
-          metadata: {
-            user: {
-              name: 'System'
-            }
-          },
-          data: `Deleted ${entries.length} messages by ${parsed.metadata.user.name}`,
-          type: 'text'
-        }));
-      });
-      return;
+      parsed = {
+        metadata: {
+          user: {
+            name: 'System'
+          }
+        },
+        data: `Deleted ${entries.length} messages by ${parsed.metadata.user.name}`,
+        type: 'text'
+      };
     }
 
-    const uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    const date = new Date().toISOString().split('T')[0];
-    await kv.set(
-      [
-        "messages",
-        parsed.metadata.user.name,
-        date,
-        uuid
-      ],
-      parsed
-    );
+    await createMessage(parsed);
+
     clients.forEach((client) => {
       client.send(message);
     });
   });
 });
+
+async function createMessage(message: Message) {
+  const uuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  const date = new Date().toISOString().split('T')[0];
+  await kv.set(
+    [
+      "messages",
+      message.metadata.user.name,
+      date,
+      uuid
+    ],
+    message
+  );
+}
