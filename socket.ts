@@ -17,11 +17,14 @@ type Message = {
 
 wss.on("connection", async function (ws: WebSocketClient) {
   clients.push(ws);
+  const messages = [];
 
   for await (const entry of kv.list({ prefix: ["messages"] })) {
     const message = await kv.get(entry.key);
-    ws.send(JSON.stringify(message.value));
+    messages.push(message);
   }
+
+  messages.reverse().forEach((message) => ws.send(JSON.stringify(message.value)));
 
   ws.on("message", async function (message: string) {
     let parsed: Message = JSON.parse(message);
