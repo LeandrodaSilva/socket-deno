@@ -9,8 +9,7 @@ wss.on("connection", function (ws: WebSocketClient) {
   clients.push(ws);
   ws.on("message", async function (message: string) {
     const parsed: { data: string; author: string } = JSON.parse(message);
-    const dateStr = new Date().toISOString();
-    await kv.set(["messages", parsed.author, dateStr], parsed);
+    await kv.set(["messages", parsed.author], parsed);
     clients.forEach((client) => {
       client.send(message);
     });
