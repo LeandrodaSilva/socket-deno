@@ -15,7 +15,7 @@ type Message = {
   type: 'text' | 'audio';
 }
 
-wss.on("connection", function (ws: WebSocketClient) {
+wss.on("connection", async function (ws: WebSocketClient) {
   clients.push(ws);
 
   for await (const entry of kv.list({ prefix: ["messages"] })) {
