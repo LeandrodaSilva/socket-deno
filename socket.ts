@@ -40,7 +40,7 @@ wss.on("connection", function (ws: WebSocketClient) {
     await createMessage(parsed);
 
     clients.forEach((client) => {
-      client.send(message);
+      client.send(JSON.stringify(parsed));
     });
   });
 });
