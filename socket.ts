@@ -1,5 +1,5 @@
 import { WebSocketClient, WebSocketServer } from "https://deno.land/x/websocket@v0.1.4/mod.ts";
-import {everyMinute, every15Minute} from 'https://deno.land/x/deno_cron/cron.ts';
+import {everyMinute, every15Minute, stop, start} from 'https://deno.land/x/deno_cron/cron.ts';
 
 const wss = new WebSocketServer(8080);
 const clients: WebSocketClient[] = [];
@@ -49,6 +49,38 @@ wss.on("connection", async function (ws: WebSocketClient) {
         ...parsed,
         data: '/clear'
       })
+    }
+
+    if (parsed.type === 'text' && parsed.data === '/stop-cron') {
+      stop();
+
+      parsed = {
+        metadata: {
+          user: {
+            name: 'System'
+          }
+        },
+        data: `Cron stopped`,
+        type: 'text'
+      }
+
+      broadcastMessage(parsed)
+    }
+
+    if (parsed.type === 'text' && parsed.data === '/start-cron') {
+      start();
+
+      parsed = {
+        metadata: {
+          user: {
+            name: 'System'
+          }
+        },
+        data: `Cron started`,
+        type: 'text'
+      }
+
+      broadcastMessage(parsed)
     }
 
     await createMessage(parsed);
