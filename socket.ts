@@ -93,7 +93,6 @@ wss.on("connection", async function (ws: WebSocketClient) {
       }
     }
 
-    await createMessage(parsed);
     broadcastMessage(parsed);
   });
 });
@@ -133,6 +132,7 @@ async function createMessage(message: Message) {
 }
 
 function broadcastMessage(message: Message) {
+  await createMessage(parsed);
   clients.forEach((client) => {
     client.send(JSON.stringify(message));
   });
