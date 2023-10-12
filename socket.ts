@@ -79,6 +79,20 @@ wss.on("connection", async function (ws: WebSocketClient) {
       }
     }
 
+    if (parsed.type === 'text' && parsed.data === '/clients-count') {
+      start();
+
+      parsed = {
+        metadata: {
+          user: {
+            name: 'System'
+          }
+        },
+        data: `Clients count: ${clients.length}`,
+        type: 'text'
+      }
+    }
+
     await createMessage(parsed);
     broadcastMessage(parsed);
   });
