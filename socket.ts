@@ -117,10 +117,10 @@ every15Minute(() => broadcastMessage({
   type: 'text'
 }))
 
-async function createMessage(message: Message) {
+function createMessage(message: Message) {
   const uuid = crypto.randomUUID();
   const date = new Date().toISOString().split('T')[0];
-  await kv.set(
+  kv.set(
     [
       "messages",
       message.metadata.user.name,
