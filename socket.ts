@@ -25,7 +25,7 @@ wss.on("connection", async function (ws: WebSocketClient) {
     messages.push(message);
   }
 
-  messages.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach((message) => ws.send(JSON.stringify(message.value)));
+  messages.sort((a, b) => new Date(b.value.date) - new Date(a.value.date)).forEach((message) => ws.send(JSON.stringify(message.value)));
 
   ws.on("message", async function (message: string) {
     let parsed: Message = JSON.parse(message);
