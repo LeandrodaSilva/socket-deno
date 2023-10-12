@@ -13,6 +13,7 @@ type Message = {
     }
   },
   data: string;
+  date: string;
   type: 'text' | 'audio';
 }
 
@@ -129,7 +130,7 @@ async function createMessage(message: Message) {
     ],
     {
       ...message,
-      date: new Date().getTime()
+      date
     }
   );
 }
