@@ -26,7 +26,7 @@ wss.on("connection", async function (ws: WebSocketClient) {
     messages.push(message);
   }
 
-  messages.sort((a, b) => new Date(b.value.date) - new Date(a.value.date)).forEach((message) => ws.send(JSON.stringify(message.value)));
+  messages.reverse().forEach((message) => ws.send(JSON.stringify(message.value)));
 
   ws.on("message", async function (message: string) {
     let parsed: Message = JSON.parse(message);
@@ -121,6 +121,7 @@ every15Minute(async () => await broadcastMessage({
 async function createMessage(message: Message) {
   const uuid = crypto.randomUUID();
   const date = new Date().toISOString().split('T')[0];
+  message.date = date;
   await kv.set(
     [
       "messages",
@@ -128,10 +129,7 @@ async function createMessage(message: Message) {
       date,
       uuid
     ],
-    {
-      ...message,
-      date
-    }
+    message
   );
 }
 
