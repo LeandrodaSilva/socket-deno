@@ -63,8 +63,6 @@ wss.on("connection", async function (ws: WebSocketClient) {
         data: `Cron stopped`,
         type: 'text'
       }
-
-      broadcastMessage(parsed)
     }
 
     if (parsed.type === 'text' && parsed.data === '/start-cron') {
@@ -79,8 +77,6 @@ wss.on("connection", async function (ws: WebSocketClient) {
         data: `Cron started`,
         type: 'text'
       }
-
-      broadcastMessage(parsed)
     }
 
     await createMessage(parsed);
