@@ -60,10 +60,10 @@ everyMinute(async () => {
   let parsed = {
     metadata: {
       user: {
-        name: 'Cron'
+        name: 'System'
       }
     },
-    data: `Cron ${new Date().toLocaleString()}`,
+    data: `Cron schedule executed at: ${new Date().toLocaleString()}`,
     type: 'text'
   };
   broadcastMessage(parsed)
