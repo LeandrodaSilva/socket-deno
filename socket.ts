@@ -45,7 +45,7 @@ wss.on("connection", async function (ws: WebSocketClient) {
         data: `Deleted ${entries.length} messages by ${parsed.metadata.user.name}`,
         type: 'text'
       };
-      broadcastMessage({
+     await broadcastMessage({
         ...parsed,
         data: '/clear'
       })
@@ -93,11 +93,11 @@ wss.on("connection", async function (ws: WebSocketClient) {
       }
     }
 
-    broadcastMessage(parsed);
+    await broadcastMessage(parsed);
   });
 });
 
-everyMinute(() => broadcastMessage({
+everyMinute(async () => await broadcastMessage({
   metadata: {
     user: {
       name: 'System'
@@ -117,10 +117,10 @@ every15Minute(() => broadcastMessage({
   type: 'text'
 }))
 
-function createMessage(message: Message) {
+async function createMessage(message: Message) {
   const uuid = crypto.randomUUID();
   const date = new Date().toISOString().split('T')[0];
-  kv.set(
+  await kv.set(
     [
       "messages",
       message.metadata.user.name,
@@ -131,8 +131,8 @@ function createMessage(message: Message) {
   );
 }
 
-function broadcastMessage(message: Message) {
-  createMessage(parsed);
+async function broadcastMessage(message: Message) {
+  await createMessage(parsed);
   clients.forEach((client) => {
     client.send(JSON.stringify(message));
   });
