@@ -1,4 +1,5 @@
 import { WebSocketClient, WebSocketServer } from "https://deno.land/x/websocket@v0.1.4/mod.ts";
+import {everyMinute} from 'https://deno.land/x/deno_cron/cron.ts';
 
 const wss = new WebSocketServer(8080);
 const clients: WebSocketClient[] = [];
@@ -54,6 +55,20 @@ wss.on("connection", async function (ws: WebSocketClient) {
     broadcastMessage(parsed);
   });
 });
+
+everyMinute(async () => {
+  let parsed = {
+    metadata: {
+      user: {
+        name: 'Cron'
+      }
+    },
+    data: `Cron ${new Date().toLocaleString()}`,
+    type: 'text'
+  };
+  broadcastMessage(parsed)
+})
+
 
 async function createMessage(message: Message) {
   const uuid = crypto.randomUUID();
