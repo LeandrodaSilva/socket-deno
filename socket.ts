@@ -95,3 +95,7 @@ function broadcastMessage(message: Message) {
     client.send(JSON.stringify(message));
   });
 }
+
+Deno.serve(async (_req) => {
+  return new Response(`Clients connected: ${clients.length}`);
+});
