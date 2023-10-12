@@ -107,7 +107,7 @@ everyMinute(async () => await broadcastMessage({
   type: 'text'
 }))
 
-every15Minute(() => broadcastMessage({
+every15Minute(async () => await broadcastMessage({
   metadata: {
     user: {
       name: 'System'
@@ -132,7 +132,7 @@ async function createMessage(message: Message) {
 }
 
 async function broadcastMessage(message: Message) {
-  await createMessage(parsed);
+  await createMessage(message);
   clients.forEach((client) => {
     client.send(JSON.stringify(message));
   });
