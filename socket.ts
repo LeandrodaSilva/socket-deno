@@ -131,7 +131,7 @@ async function createMessage(message: Message) {
   );
 }
 
-function broadcastMessage(message: Message) {
+async function broadcastMessage(message: Message) {
   await createMessage(parsed);
   clients.forEach((client) => {
     client.send(JSON.stringify(message));
